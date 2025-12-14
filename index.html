@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Future Cinema</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --primary:#7c3aed;
+  --secondary:#22d3ee;
+}
+
+/* Reset */
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Space Grotesk', sans-serif;
+}
+
+body{
+  background:#000;
+  color:#fff;
+  overflow-x:hidden;
+}
+
+/* BACKGROUNDS */
+.background{
+  position:fixed;
+  inset:0;
+  background-size:cover;
+  background-position:center;
+  transform:scale(1.05);
+  transition:opacity .8s ease, transform 1.2s ease;
+  z-index:-2;
+}
+
+.bg-1{ background-image:url('hotd.jpg'); opacity:1; }
+.bg-2{ background-image:url('cinema.jpg'); opacity:0; }
+
+/* Overlay */
+.overlay{
+  position:fixed;
+  inset:0;
+  background:linear-gradient(to bottom, rgba(0,0,0,0.45), rgba(0,0,0,0.55));
+  z-index:-1;
+}
+
+/* Sections */
+section{
+  min-height:100vh;
+  padding:90px 10%;
+}
+
+/* Hero */
+.hero h1{
+  font-size:clamp(44px,6vw,76px);
+  background:linear-gradient(90deg,var(--primary),var(--secondary));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-size:200% 100%;
+  animation: gradientShift 3s infinite alternate;
+  transition: text-shadow .3s ease;
+}
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
+.hero h1:hover{
+  text-shadow: 0 0 15px var(--primary), 0 0 30px var(--secondary);
+}
+.hero p{
+  margin-top:18px;
+  font-size:18px;
+  max-width:600px;
+  opacity:.95;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+/* Cards */
+.cards{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:30px;
+}
+
+.card{
+  position:relative;
+  height:420px;
+  border-radius:24px;
+  overflow:hidden;
+  background: var(--bg) center/cover no-repeat;
+  transition:transform .5s ease, box-shadow .5s ease;
+  cursor:pointer;
+}
+
+/* Overlay خفيف + Hover */
+.card::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(to top, rgba(0,0,0,0.6), rgba(0,0,0,0.05));
+  transition: background .3s ease;
+}
+
+/* Card content */
+.card-content{
+  position:absolute;
+  bottom:0;
+  width:100%;
+  padding:22px;
+  transition: transform .3s ease;
+}
+
+.card h3{
+  font-size:22px;
+  margin-bottom:6px;
+  transition: text-shadow .3s ease;
+}
+.card:hover h3{
+  text-shadow:0 0 10px #fff;
+}
+
+.rating{
+  color:#fde68a;
+  font-size:18px;
+}
+
+/* Description overlay */
+.card-description{
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.55);
+  color:#fff;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  padding:20px;
+  font-size:16px;
+  opacity:0;
+  transition:opacity .4s ease;
+  border-radius:24px;
+}
+
+.card:hover .card-description{
+  opacity:1;
+}
+
+/* Badge */
+.badge{
+  position:absolute;
+  top:18px;
+  right:18px;
+  background:rgba(0,0,0,0.6);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  padding:6px 14px;
+  border-radius:999px;
+  font-size:13px;
+  color:#fff;
+}
+
+/* Card Button */
+.card-btn {
+  position:absolute;
+  bottom:20px;
+  left:50%;
+  transform:translateX(-50%);
+  padding:10px 20px;
+  background:var(--primary);
+  border:none;
+  border-radius:12px;
+  color:#fff;
+  cursor:pointer;
+  transition: background .3s ease, transform .3s ease;
+  font-weight:500;
+}
+.card-btn:hover {
+  background:var(--secondary);
+  transform:translateX(-50%) translateY(-4px);
+}
+
+/* Hover effects */
+.card:hover{
+  transform:translateY(-16px) scale(1.06);
+  box-shadow:0 30px 70px rgba(0,0,0,.6);
+}
+.card:hover::before{
+  background:linear-gradient(to top, rgba(0,0,0,0.35), rgba(0,0,0,0.05));
+}
+.card:hover .card-content {
+  transform: translateY(-10px);
+}
+
+/* Ken Burns effect */
+@keyframes kenburns{
+  0% { transform:scale(1.05) translateY(0); }
+  100% { transform:scale(1.1) translateY(-10px); }
+}
+
+/* Responsive */
+@media (max-width:768px){
+  .card{ height:360px; }
+}
+</style>
+</head>
+<body>
+
+<div class="background bg-1"></div>
+<div class="background bg-2"></div>
+<div class="overlay"></div>
+
+<main>
+
+<section class="hero">
+  <h1>Future Cinema</h1>
+  <p>تقييمات أفلام ومسلسلات مع تأثيرات سينمائية جذابة</p>
+</section>
+
+<section>
+  <div class="cards">
+
+    <div class="card" style="--bg:url('interstellar.jpg')" aria-label="Interstellar movie card">
+      <span class="badge">Movie</span>
+      <div class="card-description">
+        في المستقبل، رحلة عبر الفضاء لاستكشاف نهاية الكون وعودة البشرية.
+      </div>
+      <div class="card-content">
+        <h3>Interstellar</h3>
+        <div class="rating">⭐ 9.5</div>
+      </div>
+      <button class="card-btn">عرض التفاصيل</button>
+    </div>
+
+    <div class="card" style="--bg:url('dune.jpg')" aria-label="Dune movie card">
+      <span class="badge">Movie</span>
+      <div class="card-description">
+        ملحمة صحراوية بين العائلات والقدرات الخارقة للكواكب البعيدة.
+      </div>
+      <div class="card-content">
+        <h3>Dune</h3>
+        <div class="rating">⭐ 9.0</div>
+      </div>
+      <button class="card-btn">عرض التفاصيل</button>
+    </div>
+
+    <div class="card" style="--bg:url('breakingbad.jpg')" aria-label="Breaking Bad series card">
+      <span class="badge">Series</span>
+      <div class="card-description">
+        قصة معلم كيمياء يتحول إلى صانع مخدرات مع تطور شخصيات مثير.
+      </div>
+      <div class="card-content">
+        <h3>Breaking Bad</h3>
+        <div class="rating">⭐ 10</div>
+      </div>
+      <button class="card-btn">عرض التفاصيل</button>
+    </div>
+
+  </div>
+</section>
+
+</main>
+
+<script>
+const bg1 = document.querySelector('.bg-1');
+const bg2 = document.querySelector('.bg-2');
+
+window.addEventListener('scroll', () => {
+  const y = window.scrollY;
+  const switchPoint = window.innerHeight * 0.8;
+
+  // حركة خلفية سلسة
+  bg1.style.transform = `scale(1.05) translateY(${y*0.12}px)`;
+  bg2.style.transform = `scale(1.05) translateY(${y*0.12}px)`;
+
+  // تبديل opacity
+  if(y > switchPoint){
+    bg1.style.opacity = 0;
+    bg2.style.opacity = 1;
+  } else {
+    bg1.style.opacity = 1;
+    bg2.style.opacity = 0;
+  }
+
+  // حركة parallax خفيفة للكروت
+  document.querySelectorAll('.card').forEach(card => {
+    card.style.transform = `translateY(${y*0.05}px)`;
+  });
+});
+</script>
+
+</body>
+</html>
