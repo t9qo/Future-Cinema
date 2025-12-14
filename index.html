@@ -10,206 +10,257 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
 
 <style>
-:root{
-  --primary:#7c3aed;
-  --secondary:#22d3ee;
+:root {
+  --primary: #7c3aed;
+  --secondary: #22d3ee;
+  --glow: rgba(124,58,237,0.6);
 }
 
 /* Reset */
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:'Space Grotesk', sans-serif;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Space Grotesk', sans-serif;
+  scroll-behavior: smooth;
 }
 
-body{
-  background:#000;
-  color:#fff;
-  overflow-x:hidden;
+body {
+  background: #000;
+  color: #fff;
+  overflow-x: hidden;
 }
 
-/* BACKGROUNDS */
-.background{
-  position:fixed;
-  inset:0;
-  background-size:cover;
-  background-position:center;
-  transform:scale(1.05);
-  transition:opacity .8s ease, transform 1.2s ease;
-  z-index:-2;
+/* Backgrounds */
+.background {
+  position: fixed;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  transform: scale(1.05);
+  transition: opacity 1s ease, transform 1.2s ease, filter 1s ease;
+  z-index: -3;
+  will-change: transform, opacity, filter;
+  filter: blur(0px) brightness(1);
+}
+.bg-1 { background-image: url('hotd.jpg'); opacity: 1; }
+.bg-2 { background-image: url('cinema.jpg'); opacity: 0; }
+
+/* Fog layers */
+.fog-bg {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: url('fog.png') repeat;
+  background-size: cover;
+  opacity: 0.15;
+  z-index: -2;
+  transform: translateY(0);
+  transition: transform 0.2s ease, opacity 0.5s ease;
 }
 
-.bg-1{ background-image:url('hotd.jpg'); opacity:1; }
-.bg-2{ background-image:url('cinema.jpg'); opacity:0; }
+.fog-fg {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: url('fog.png') repeat;
+  background-size: cover;
+  opacity: 0.08;
+  z-index: 1;
+  transform: translateY(0);
+  transition: transform 0.2s ease, opacity 0.5s ease;
+}
 
 /* Overlay */
-.overlay{
-  position:fixed;
-  inset:0;
-  background:linear-gradient(to bottom, rgba(0,0,0,0.45), rgba(0,0,0,0.55));
-  z-index:-1;
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.45), rgba(0,0,0,0.55));
+  z-index: -1;
+  pointer-events: none;
 }
 
 /* Sections */
-section{
-  min-height:100vh;
-  padding:90px 10%;
+section {
+  min-height: 100vh;
+  padding: 90px 10%;
 }
 
 /* Hero */
-.hero h1{
-  font-size:clamp(44px,6vw,76px);
-  background:linear-gradient(90deg,var(--primary),var(--secondary));
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-  background-size:200% 100%;
+.hero {
+  text-align: center;
+  overflow: hidden;
+}
+.hero h1 {
+  font-size: clamp(44px, 6vw, 76px);
+  background: linear-gradient(90deg, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 200% 100%;
   animation: gradientShift 3s infinite alternate;
-  transition: text-shadow .3s ease;
+  transition: text-shadow 0.3s ease, transform 0.6s ease, opacity 0.6s ease;
+}
+.hero h1:hover {
+  text-shadow: 0 0 15px var(--primary), 0 0 30px var(--secondary);
+}
+.hero p {
+  margin-top: 18px;
+  font-size: 18px;
+  max-width: 600px;
+  opacity: 0.95;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+  transition: transform 0.6s ease, opacity 0.6s ease;
 }
 @keyframes gradientShift {
   0% { background-position: 0% 50%; }
   100% { background-position: 100% 50%; }
 }
-.hero h1:hover{
-  text-shadow: 0 0 15px var(--primary), 0 0 30px var(--secondary);
-}
-.hero p{
-  margin-top:18px;
-  font-size:18px;
-  max-width:600px;
-  opacity:.95;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-}
 
 /* Cards */
-.cards{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-  gap:30px;
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 30px;
+  perspective: 1000px;
 }
 
-.card{
-  position:relative;
-  height:420px;
-  border-radius:24px;
-  overflow:hidden;
+.card {
+  position: relative;
+  height: 420px;
+  border-radius: 24px;
+  overflow: hidden;
   background: var(--bg) center/cover no-repeat;
-  transition:transform .5s ease, box-shadow .5s ease;
-  cursor:pointer;
+  transition: transform 0.5s ease, box-shadow 0.5s ease, filter 0.5s ease;
+  cursor: pointer;
+  will-change: transform, box-shadow, filter;
 }
 
-/* Overlay خفيف + Hover */
-.card::before{
+/* Hover effects advanced */
+.card:hover, .card.scroll-glow {
+  transform: translateY(-16px) scale(1.07) rotateX(1deg) rotateY(1deg);
+  box-shadow: 0 40px 90px rgba(124,58,237,0.6), 0 0 60px rgba(34,211,238,0.5);
+  filter: brightness(1.05);
+}
+
+/* Overlay خفيف */
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.6), rgba(0,0,0,0.05));
+  transition: background 0.3s ease;
+}
+
+/* ظل داخلي للكروت */
+.card::after {
   content:"";
   position:absolute;
   inset:0;
-  background:linear-gradient(to top, rgba(0,0,0,0.6), rgba(0,0,0,0.05));
-  transition: background .3s ease;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.5) inset;
+  border-radius:24px;
+  pointer-events:none;
 }
 
 /* Card content */
-.card-content{
-  position:absolute;
-  bottom:0;
-  width:100%;
-  padding:22px;
-  transition: transform .3s ease;
+.card-content {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 22px;
+  transition: transform 0.3s ease;
 }
-
-.card h3{
-  font-size:22px;
-  margin-bottom:6px;
-  transition: text-shadow .3s ease;
+.card h3 {
+  font-size: 22px;
+  margin-bottom: 6px;
+  transition: text-shadow 0.3s ease;
 }
-.card:hover h3{
-  text-shadow:0 0 10px #fff;
+.card:hover h3 {
+  text-shadow: 0 0 12px #fff;
 }
-
-.rating{
-  color:#fde68a;
-  font-size:18px;
+.rating {
+  color: #fde68a;
+  font-size: 18px;
 }
 
 /* Description overlay */
-.card-description{
-  position:absolute;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  background:rgba(0,0,0,0.55);
-  color:#fff;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  text-align:center;
-  padding:20px;
-  font-size:16px;
-  opacity:0;
-  transition:opacity .4s ease;
-  border-radius:24px;
+.card-description {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 20px;
+  font-size: 16px;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  border-radius: 24px;
+}
+.card:hover .card-description {
+  opacity: 1;
 }
 
-.card:hover .card-description{
-  opacity:1;
+/* Badges dynamic */
+.badge {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  color: #fff;
+  font-weight: 500;
 }
+.card[data-type="Movie"] .badge { background: #7c3aed; }
+.card[data-type="Series"] .badge { background: #22d3ee; }
 
-/* Badge */
-.badge{
-  position:absolute;
-  top:18px;
-  right:18px;
-  background:rgba(0,0,0,0.6);
-  backdrop-filter:blur(10px);
-  -webkit-backdrop-filter:blur(10px);
-  padding:6px 14px;
-  border-radius:999px;
-  font-size:13px;
-  color:#fff;
-}
-
-/* Card Button */
+/* Card Buttons & Icons */
 .card-btn {
-  position:absolute;
-  bottom:20px;
-  left:50%;
-  transform:translateX(-50%);
-  padding:10px 20px;
-  background:var(--primary);
-  border:none;
-  border-radius:12px;
-  color:#fff;
-  cursor:pointer;
-  transition: background .3s ease, transform .3s ease;
-  font-weight:500;
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 10px 20px;
+  background: var(--primary);
+  border: none;
+  border-radius: 12px;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  font-weight: 500;
 }
 .card-btn:hover {
-  background:var(--secondary);
-  transform:translateX(-50%) translateY(-4px);
+  background: var(--secondary);
+  transform: translateX(-50%) translateY(-4px);
+  box-shadow: 0 0 12px var(--glow);
+}
+.card-btn:active {
+  transform: translateX(-50%) translateY(-2px) scale(0.98);
+  box-shadow: 0 0 8px var(--glow);
 }
 
-/* Hover effects */
-.card:hover{
-  transform:translateY(-16px) scale(1.06);
-  box-shadow:0 30px 70px rgba(0,0,0,.6);
+.card-icon {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  background: rgba(0,0,0,0.5);
+  border-radius: 50%;
+  padding: 8px;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-.card:hover::before{
-  background:linear-gradient(to top, rgba(0,0,0,0.35), rgba(0,0,0,0.05));
-}
-.card:hover .card-content {
-  transform: translateY(-10px);
-}
-
-/* Ken Burns effect */
-@keyframes kenburns{
-  0% { transform:scale(1.05) translateY(0); }
-  100% { transform:scale(1.1) translateY(-10px); }
+.card-icon:hover {
+  transform: scale(1.2);
+  box-shadow: 0 0 12px var(--glow);
 }
 
 /* Responsive */
-@media (max-width:768px){
-  .card{ height:360px; }
+@media (max-width:768px) {
+  .card { height: 360px; }
 }
 </style>
 </head>
@@ -229,8 +280,9 @@ section{
 <section>
   <div class="cards">
 
-    <div class="card" style="--bg:url('interstellar.jpg')" aria-label="Interstellar movie card">
+    <div class="card" data-type="Movie" style="--bg:url('interstellar.jpg')" aria-label="Interstellar movie card">
       <span class="badge">Movie</span>
+      <div class="card-icon">🎬</div>
       <div class="card-description">
         في المستقبل، رحلة عبر الفضاء لاستكشاف نهاية الكون وعودة البشرية.
       </div>
@@ -241,8 +293,9 @@ section{
       <button class="card-btn">عرض التفاصيل</button>
     </div>
 
-    <div class="card" style="--bg:url('dune.jpg')" aria-label="Dune movie card">
+    <div class="card" data-type="Movie" style="--bg:url('dune.jpg')" aria-label="Dune movie card">
       <span class="badge">Movie</span>
+      <div class="card-icon">🌵</div>
       <div class="card-description">
         ملحمة صحراوية بين العائلات والقدرات الخارقة للكواكب البعيدة.
       </div>
@@ -253,8 +306,9 @@ section{
       <button class="card-btn">عرض التفاصيل</button>
     </div>
 
-    <div class="card" style="--bg:url('breakingbad.jpg')" aria-label="Breaking Bad series card">
+    <div class="card" data-type="Series" style="--bg:url('breakingbad.jpg')" aria-label="Breaking Bad series card">
       <span class="badge">Series</span>
+      <div class="card-icon">⚗️</div>
       <div class="card-description">
         قصة معلم كيمياء يتحول إلى صانع مخدرات مع تطور شخصيات مثير.
       </div>
@@ -273,28 +327,61 @@ section{
 <script>
 const bg1 = document.querySelector('.bg-1');
 const bg2 = document.querySelector('.bg-2');
+const heroTitle = document.querySelector('.hero h1');
+const heroDesc = document.querySelector('.hero p');
+const cards = document.querySelectorAll('.card');
+
+// إضافة fog layers
+const fogBg = document.createElement('div');
+fogBg.classList.add('fog-bg');
+document.body.appendChild(fogBg);
+
+const fogFg = document.createElement('div');
+fogFg.classList.add('fog-fg');
+document.body.appendChild(fogFg);
 
 window.addEventListener('scroll', () => {
   const y = window.scrollY;
   const switchPoint = window.innerHeight * 0.8;
 
-  // حركة خلفية سلسة
-  bg1.style.transform = `scale(1.05) translateY(${y*0.12}px)`;
-  bg2.style.transform = `scale(1.05) translateY(${y*0.12}px)`;
+  // === حركة الخلفيات 3D + blur + brightness ===
+  const bgScale = 1.05 + y*0.0007;
+  const bgBlur = y*0.0025;
+  const bgBright = 1 - y*0.0005;
 
-  // تبديل opacity
-  if(y > switchPoint){
-    bg1.style.opacity = 0;
-    bg2.style.opacity = 1;
-  } else {
-    bg1.style.opacity = 1;
-    bg2.style.opacity = 0;
-  }
+  bg1.style.transform = `scale(${bgScale}) translateY(${y*0.12}px)`;
+  bg2.style.transform = `scale(${bgScale}) translateY(${y*0.12}px)`;
+  bg1.style.filter = `blur(${bgBlur}px) brightness(${bgBright})`;
+  bg2.style.filter = `blur(${bgBlur}px) brightness(${bgBright})`;
 
-  // حركة parallax خفيفة للكروت
-  document.querySelectorAll('.card').forEach(card => {
-    card.style.transform = `translateY(${y*0.05}px)`;
+  // تبديل opacity سلس
+  bg1.style.opacity = y > switchPoint ? 0 : 1;
+  bg2.style.opacity = y > switchPoint ? 1 : 0;
+
+  // === Hero text floating effect ===
+  const heroScale = 1 + y*0.0004;
+  heroTitle.style.transform = `translateY(${y*0.25}px) scale(${heroScale})`;
+  heroTitle.style.opacity = `${Math.max(1 - y*0.0015, 0.7)}`;
+  heroDesc.style.transform = `translateY(${y*0.2}px)`;
+  heroDesc.style.opacity = `${Math.max(0.95 - y*0.0017, 0.5)}`;
+
+  // === Cards parallax + glow ===
+  cards.forEach((card, i) => {
+    const offset = y*0.06 + i*2;
+    card.style.transform = `translateY(${offset}px)`;
+    if (y + window.innerHeight/2 > card.offsetTop) {
+      card.classList.add('scroll-glow');
+    } else {
+      card.classList.remove('scroll-glow');
+    }
   });
+
+  // === حركة الضباب ===
+  fogBg.style.transform = `translateY(${y*0.03}px)`;
+  fogBg.style.opacity = `${0.15 + Math.min(y*0.0002, 0.25)}`;
+
+  fogFg.style.transform = `translateY(${y*0.015}px)`;
+  fogFg.style.opacity = `${0.08 + Math.min(y*0.0001, 0.12)}`;
 });
 </script>
 
